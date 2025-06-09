@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Agendamento</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-uniube">
+  <div class="container">
+    <a class="navbar-brand text-white" href="/dashboard">Sistema de Agendamento</a>
+    <div class="d-flex">
+      <form method="POST" action="/logout">
+        <button type="submit" class="btn btn-outline-light btn-sm">Sair</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<!-- Conteúdo -->
+<div class="container mt-5">
+  <h3 class="mb-4">Editar Agendamento</h3>
+
+  <div class="card">
+    <div class="card-body">
+      <form method="POST" action="/editar-agendamento/{{ id }}">
+        <div class="mb-3">
+          <label class="form-label">Setor</label>
+          <select name="setor" class="form-select" required>
+            <option value="">Selecione o setor</option>
+            <option value="Secretaria" {% if agendamento[0] == 'Secretaria' %}selected{% endif %}>Secretaria</option>
+            <option value="Financeiro" {% if agendamento[0] == 'Financeiro' %}selected{% endif %}>Financeiro</option>
+            <option value="Acadêmico" {% if agendamento[0] == 'Acadêmico' %}selected{% endif %}>Acadêmico</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Data</label>
+          <input type="date" name="data" class="form-control" required
+                 value="{{ agendamento[1] }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Hora</label>
+          <select name="hora" class="form-select" required>
+            <option value="">Selecione a hora</option>
+            {% for h in range(8, 21) %}
+              <option value="{{ '%02d:00' % h }}" {% if agendamento[2] == '%02d:00' % h %}selected{% endif %}>
+                {{ '%02d:00' % h }}
+              </option>
+              <option value="{{ '%02d:30' % h }}" {% if agendamento[2] == '%02d:30' % h %}selected{% endif %}>
+                {{ '%02d:30' % h }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-uniube">Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Rodapé -->
+<footer>
+  <img src="{{ url_for('static', filename='logouniube.png') }}" alt="Logo Uniube">
+  <p class="text-muted mt-2 mb-0">&copy; 2025 - Sistema de Agendamento Universitário</p>
+</footer>
+
+</body>
+</html>

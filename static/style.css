@@ -1,0 +1,123 @@
+:root {
+  --azul-uniube: #2D2855;
+  --azul-hover: #4F4C6C;
+  --branco: #FFFFFF;
+}
+
+body {
+  background-color: #f8f9fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+.navbar-uniube {
+  background-color: var(--azul-uniube);
+}
+
+.navbar-uniube .navbar-brand {
+  color: white;
+  font-weight: 600;
+}
+
+.navbar-uniube .navbar-brand:hover {
+  color: #ccc;
+}
+
+.navbar-uniube .btn-outline-light {
+  border-color: white;
+  color: white;
+}
+
+.navbar-uniube .btn-outline-light:hover {
+  background-color: white;
+  color: var(--azul-uniube);
+}
+
+/* Botões */
+.btn-uniube {
+  background-color: var(--azul-uniube);
+  color: var(--branco);
+}
+
+.btn-uniube:hover {
+  background-color: var(--azul-hover);
+  color: var(--branco);
+}
+
+/* Cabeçalhos */
+h3, h4, h5 {
+  color: var(--azul-uniube);
+  font-weight: 600;
+}
+
+/* Cards */
+.card {
+  border-radius: 10px;
+  box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  background-color: var(--azul-uniube);
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Rodapé */
+footer {
+  text-align: center;
+  margin-top: 50px;
+}
+
+footer img {
+  width: 120px;
+}
+
+footer p {
+  color: #777;
+}
+
+/* Formulários */
+.form-label {
+  font-weight: 500;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+select {
+  border-radius: 6px;
+}
+
+/* Tabelas */
+.table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th {
+  background-color: var(--azul-uniube);
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table td {
+  background-color: #fff;
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+/* Alerts */
+.alert {
+  border-radius: 8px;
+}
