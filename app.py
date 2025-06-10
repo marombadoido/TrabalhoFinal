@@ -27,8 +27,8 @@ def login():
     cursor = conn.cursor()
     cursor.execute("""
         SELECT id, nome, senha, tipo_usuario
-        FROM Usuario
-        WHERE email = ? AND tipo_usuario = 'aluno'
+        FROM "Usuario"
+        WHERE email = %s AND tipo_usuario = 'aluno'
     """, (email,))
     usuario = cursor.fetchone()
 
@@ -57,8 +57,8 @@ def login_funcionario():
     cursor = conn.cursor()
     cursor.execute("""
         SELECT id, nome, senha
-        FROM Usuario
-        WHERE tipo_usuario = 'funcionario' AND matricula = ? AND cpf = ?
+        FROM "Usuario"
+        WHERE tipo_usuario = 'funcionario' AND matricula = %s AND cpf = %s
     """, (matricula, cpf))
     funcionario = cursor.fetchone()
 
@@ -93,8 +93,8 @@ def cadastro():
 
     try:
         cursor.execute("""
-            INSERT INTO Usuario (nome, email, senha, tipo_usuario, matricula, cpf)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO "Usuario" (nome, email, senha, tipo_usuario, matricula, cpf)
+            VALUES (%s, %s, %s, %s, %s, %s)
         """, (nome, email, senha_hash, tipo_usuario, matricula, cpf))
         conn.commit()
     except Exception as e:
@@ -132,8 +132,8 @@ def agendar():
         hora = request.form['hora']
 
         cursor.execute("""
-            SELECT COUNT(*) FROM Agendamento
-            WHERE data = ? AND hora = ? AND status = 'ativo'
+            SELECT COUNT(*) FROM "Agendamento"
+            WHERE data = %s AND hora = %s AND status = 'ativo'
         """, (data, hora))
         existe = cursor.fetchone()[0]
 
@@ -141,16 +141,16 @@ def agendar():
             mensagem = f"Erro: Já existe um agendamento para {data} às {hora}."
         else:
             cursor.execute("""
-                INSERT INTO Agendamento (usuario_id, setor, data, hora, status)
-                VALUES (?, ?, ?, ?, 'ativo')
+                INSERT INTO "Agendamento" (usuario_id, setor, data, hora, status)
+                VALUES (%s, %s, %s, %s, 'ativo')
             """, (session['usuario_id'], setor, data, hora))
             conn.commit()
             mensagem = "Agendamento realizado com sucesso!"
 
     cursor.execute("""
         SELECT id, setor, data, hora
-        FROM Agendamento
-        WHERE usuario_id = ? AND status = 'ativo'
+        FROM "Agendamento"
+        WHERE usuario_id = %s AND status = 'ativo'
         ORDER BY data DESC, hora DESC
     """, (session['usuario_id'],))
     agendamentos = cursor.fetchall()
@@ -176,8 +176,8 @@ def meus_agendamentos():
     cursor = conn.cursor()
     cursor.execute("""
         SELECT id, setor, data, hora
-        FROM Agendamento
-        WHERE usuario_id = ? AND status = 'ativo'
+        FROM "Agendamento"
+        WHERE usuario_id = %s AND status = 'ativo'
         ORDER BY data DESC, hora DESC
     """, (session['usuario_id'],))
     agendamentos = cursor.fetchall()
@@ -204,9 +204,9 @@ def editar_agendamento(id):
         hora = request.form['hora']
 
         cursor.execute("""
-            UPDATE Agendamento
-            SET setor = ?, data = ?, hora = ?
-            WHERE id = ? AND usuario_id = ?
+            UPDATE "Agendamento"
+            SET setor = %s, data = %s, hora = %s
+            WHERE id = %s AND usuario_id = %s
         """, (setor, data, hora, id, session['usuario_id']))
         conn.commit()
         conn.close()
@@ -215,8 +215,8 @@ def editar_agendamento(id):
 
     cursor.execute("""
         SELECT setor, data, hora
-        FROM Agendamento
-        WHERE id = ? AND usuario_id = ?
+        FROM "Agendamento"
+        WHERE id = %s AND usuario_id = %s
     """, (id, session['usuario_id']))
     agendamento = cursor.fetchone()
     conn.close()
@@ -238,8 +238,8 @@ def excluir_agendamento(id):
 
     cursor = conn.cursor()
     cursor.execute("""
-        DELETE FROM Agendamento
-        WHERE id = ? AND usuario_id = ?
+        DELETE FROM "Agendamento"
+        WHERE id = %s AND usuario_id = %s
     """, (id, session['usuario_id']))
     conn.commit()
     conn.close()
@@ -262,9 +262,9 @@ def fila():
     cursor = conn.cursor()
     cursor.execute("""
         SELECT hora, setor, u.nome
-        FROM Agendamento a
-        JOIN Usuario u ON a.usuario_id = u.id
-        WHERE a.data = ? AND a.status = 'ativo'
+        FROM "Agendamento" a
+        JOIN "Usuario" u ON a.usuario_id = u.id
+        WHERE a.data = %s AND a.status = 'ativo'
         ORDER BY hora
     """, (data_ref,))
     agendados = cursor.fetchall()
@@ -317,9 +317,9 @@ def painel_funcionario():
             cursor = conn.cursor()
             cursor.execute("""
                 SELECT a.data, a.hora, a.setor, u.nome
-                FROM Agendamento a
-                JOIN Usuario u ON a.usuario_id = u.id
-                WHERE a.status = 'ativo' AND MONTH(a.data) = ? AND YEAR(a.data) = ?
+                FROM "Agendamento" a
+                JOIN "Usuario" u ON a.usuario_id = u.id
+                WHERE a.status = 'ativo' AND EXTRACT(MONTH FROM a.data) = %s AND EXTRACT(YEAR FROM a.data) = %s
                 ORDER BY a.data, a.hora
             """, (mes, ano))
             rows = cursor.fetchall()
