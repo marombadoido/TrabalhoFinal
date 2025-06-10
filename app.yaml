@@ -1,0 +1,13 @@
+runtime: python310
+
+entrypoint: gunicorn -b :$PORT app:app
+
+env_variables:
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: StrongPassword123!
+  POSTGRES_DB: SistemaAgendamento
+  POSTGRES_HOST: 34.136.2.112
+  POSTGRES_PORT: 5432
+  SECRET_KEY: chave-secreta-super-segura
+
+instance_class: F2
